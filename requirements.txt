@@ -1,0 +1,11 @@
+boto
+bz2file
+Cython
+gensim
+mecab-python3
+numpy
+requests
+scipy
+six
+smart-open
+nltk
