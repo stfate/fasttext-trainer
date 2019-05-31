@@ -10,7 +10,7 @@ import sys
 
 import nltk
 
-import ymh_nlp.textio as textio
+import lucia.textio as textio
 
 
 class TextDatasetBase(ABC):
