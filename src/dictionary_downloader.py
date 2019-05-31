@@ -7,6 +7,7 @@ import tempfile
 __neologd_repo_name = "mecab-ipadic-neologd"
 __neologd_repo_url = "https://github.com/neologd/mecab-ipadic-neologd.git"
 
+
 def download_neologd(dic_path):
     dic_path = os.path.abspath(dic_path)
     with tempfile.TemporaryDirectory() as temp_dir:

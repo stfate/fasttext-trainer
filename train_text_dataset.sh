@@ -11,9 +11,10 @@ PRETRAINED_MODEL_PATH=model/wikipedia-ja-w2v-model/word2vec.gensim.model
 SIZE=300
 WINDOW=8
 MIN_COUNT=1
+EPOCH=5
 
 # download mecab-ipadic-neologd
 # python src/train_text_dataset.py --download-neologd --dictionary-path=$DIC_PATH
 
-# python src/train_text_dataset.py --build-model -o $OUTPUT_PATH --dictionary-path=$DIC_PATH --dataset-path=$DATASET_PATH --lang=$LANG --size=$SIZE --window=$WINDOW --min-count=$MIN_COUNT --use-pretrained-model --pretrained-model-path=$PRETRAINED_MODEL_PATH
-python src/train_text_dataset.py --build-model -o $OUTPUT_PATH --dictionary-path=$DIC_PATH --dataset-path=$DATASET_PATH --lang=$LANG --size=$SIZE --window=$WINDOW --min-count=$MIN_COUNT
+# python src/train_text_dataset.py --build-model -o $OUTPUT_PATH --dictionary-path=$DIC_PATH --dataset-path=$DATASET_PATH --lang=$LANG --size=$SIZE --window=$WINDOW --min-count=$MIN_COUNT --epoch=$EPOCH --use-pretrained-model --pretrained-model-path=$PRETRAINED_MODEL_PATH
+python src/train_text_dataset.py --build-model -o $OUTPUT_PATH --dictionary-path=$DIC_PATH --dataset-path=$DATASET_PATH --lang=$LANG --size=$SIZE --window=$WINDOW --min-count=$MIN_COUNT --epoch=$EPOCH

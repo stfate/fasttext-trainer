@@ -1,14 +1,19 @@
 from abc import ABC, abstractmethod
-import MeCab
-import nltk
 import re
 import functools
+
+import MeCab
+import nltk
+
+import ymh_nlp.morphological as morpho
 
 
 ptn_number = re.compile(r"([0-9]|[０-９])+")
 
+
 def get_tagger(dic_path):
     return MeCab.Tagger(f"-Ochasen -d {dic_path}")
+
 
 def concat_continuous_numbers(tokens):
     prev_token = ""
@@ -22,6 +27,7 @@ def concat_continuous_numbers(tokens):
             i = i - 1
 
     return tokens_out
+
 
 def tokenize(text, tagger):
     tokens = []
@@ -37,6 +43,7 @@ def tokenize(text, tagger):
     
     return tokens
 
+
 class DocumentTokenizerBase(ABC):
     @abstractmethod
     def tokenize(self, text):
@@ -45,6 +52,7 @@ class DocumentTokenizerBase(ABC):
     @abstractmethod
     def get_tokens_iterator(self, iter_docs):
         pass
+
 
 class MecabDocumentTokenizer(DocumentTokenizerBase):
     def __init__(self, dic_path):
@@ -73,12 +81,13 @@ class MecabDocumentTokenizer(DocumentTokenizerBase):
 
         return iter_tokens
 
+
 class NltkDocumentTokenizer(DocumentTokenizerBase):
     def __init__(self):
-        self.tagger = nltk.word_tokenize
+        self.tagger = morpho.NltkTokenizer()
 
     def tokenize(self, text):
-        tokens = self.tagger(text)
+        tokens = self.tagger.tokenize(text)
         tokens = concat_continuous_numbers(tokens)
         return tokens
 
@@ -90,4 +99,3 @@ class NltkDocumentTokenizer(DocumentTokenizerBase):
                 yield tokenize(doc["body"])
 
         return iter_tokens
-    

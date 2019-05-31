@@ -4,8 +4,9 @@ import tempfile
 
 import document_tokenizer
 import dictionary_downloader
-import text_corpus
+import text_dataset
 import fasttext_trainer
+
 
 __jawiki_dump_file_name = "jawiki-latest-pages-articles.xml.bz2"
 __jawiki_dump_url = f"https://dumps.wikimedia.org/jawiki/latest/{__jawiki_dump_file_name}" # noqa
@@ -19,6 +20,8 @@ def get_options():
     parser.add_argument("--size", type=int, default=100)
     parser.add_argument("--window", type=int, default=8)
     parser.add_argument("--min-count", type=int, default=10)
+    parser.add_argument("--sg", type=int, default=1)
+    parser.add_argument("--epoch", type=int, default=5)
 
     parser.add_argument("--download-wikipedia-dump", action="store_true", default=False)
     parser.add_argument("--wikipedia-dump-path", default=f"data/{__jawiki_dump_file_name}")
@@ -33,6 +36,7 @@ def get_options():
 
     args = parser.parse_args()
     return vars(args)
+
 
 if __name__ == "__main__":
     options = get_options()
@@ -52,7 +56,7 @@ if __name__ == "__main__":
 
     wikipedia_dump_path = options["wikipedia_dump_path"]
     wikipedia_dump_url = options["wikipedia_dump_url"]
-    wikipedia = text_corpus.WikipediaCorpus()
+    wikipedia = text_dataset.WikipediaDataset()
     if options["download_wikipedia_dump"]:
         wikipedia.download_dump(wikipedia_dump_path, wikipedia_dump_url)
 
@@ -60,6 +64,8 @@ if __name__ == "__main__":
     size = options["size"]
     window = options["window"]
     min_count = options["min_count"]
+    sg = options["sg"]
+    epoch = options["epoch"]
     use_pretrained_model = options["use_pretrained_model"]
     pretrained_model_path = options["pretrained_model_path"]
     lang = options["lang"]
@@ -70,4 +76,4 @@ if __name__ == "__main__":
                 tokenizer = document_tokenizer.MecabDocumentTokenizer(dic_path)
             elif lang == "en":
                 tokenizer = document_tokenizer.NltkDocumentTokenizer()
-            fasttext_trainer.train_fasttext_model(output_model_path, iter_docs, tokenizer, size, window, min_count, use_pretrained_model, pretrained_model_path)
+            fasttext_trainer.train_fasttext_model(output_model_path, iter_docs, tokenizer, size, window, min_count, sg, epoch, use_pretrained_model, pretrained_model_path)

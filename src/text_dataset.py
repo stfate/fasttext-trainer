@@ -1,4 +1,3 @@
-
 from abc import ABC, abstractmethod
 import bz2
 from pathlib import Path
@@ -8,14 +7,17 @@ import os
 import re
 import subprocess
 import sys
+
 import nltk
-import lucia.textio as textio
+
+import ymh_nlp.textio as textio
 
 
 class TextDatasetBase(ABC):
     @abstractmethod
     def iter_docs(self):
         yield None
+
 
 class ArtistReviewDataset(TextDatasetBase):
     def __init__(self):
@@ -31,6 +33,7 @@ class ArtistReviewDataset(TextDatasetBase):
             reader = textio.TextReader(fn)
             lines = reader.read()
             yield {"title": title, "body": lines}
+
 
 class WikipediaDataset(TextDatasetBase):
     def __init__(self):
@@ -90,13 +93,15 @@ class WikipediaDataset(TextDatasetBase):
         cmd = ["curl", "-o", file_path, url]
         subprocess.call(cmd, stdout=sys.stdout)
 
+
 class MARDDataset(TextDatasetBase):
     def __init__(self):
         self.root_path = None
 
     def iter_docs(self, dataset_path):
         self.root_path = Path(dataset_path)
-        reviews_json_fn = self.root_path / "mard_reviews.json"
+        # reviews_json_fn = self.root_path / "mard_reviews.json"
+        reviews_json_fn = self.root_path / "mard_reviews_normalized.json"
         with open(reviews_json_fn, "r") as fi:
             for line in fi:
                 review_dict = json.loads(line, encoding="utf-8")
