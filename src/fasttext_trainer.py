@@ -16,7 +16,7 @@ def count_generator(iter):
 def train_fasttext_model(output_model_path, iter_docs, tokenizer, size=300, window=8, min_count=5, sg=1, epoch=5, use_pretrained_model=False, pretrained_model_path=None):
     logging.info("get tokens iterator")
 
-    iter_tokens = tokenizer.get_tokens_iterator(iter_docs)
+    iter_tokens = tokenizer.get_tokens_iterator(iter_docs, normalize=False)
     n_obs = count_generator(iter_tokens())
 
     logging.info("build vocabulary")

@@ -89,10 +89,6 @@ class WikipediaDataset(TextDatasetBase):
                         if len(line) > 0:
                             lines.append(line)
 
-    def download_dump(self, file_path, url):
-        cmd = ["curl", "-o", file_path, url]
-        subprocess.call(cmd, stdout=sys.stdout)
-
 
 class MARDDataset(TextDatasetBase):
     def __init__(self):

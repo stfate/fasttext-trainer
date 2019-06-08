@@ -5,7 +5,7 @@ import functools
 import MeCab
 import nltk
 
-import lucia.morphological as morpho
+import lucia.tokenizer as tokenizer
 
 
 ptn_number = re.compile(r"([0-9]|[０-９])+")
@@ -56,24 +56,16 @@ class DocumentTokenizerBase(ABC):
 
 class MecabDocumentTokenizer(DocumentTokenizerBase):
     def __init__(self, dic_path):
-        self.tagger = MeCab.Tagger(f"-Ochasen -d {dic_path}")
+        self.tagger = tokenizer.MeCabTokenizer(dic_path)
 
-    def tokenize(self, text):
-        tokens = []
-        parsed_text = self.tagger.parse(text)
-        if parsed_text is not None:
-            for line in parsed_text.split('\n'):
-                if line == "EOS":
-                    break
-                surface = line.split('\t')[0]
-                tokens.append(surface)
-
-            tokens = concat_continuous_numbers(tokens)
+    def tokenize(self, text, normalize=False):
+        tokens,pos_tags = self.tagger.tokenize(text, normalize=normalize)
+        tokens = concat_continuous_numbers(tokens)
 
         return tokens
 
-    def get_tokens_iterator(self, iter_docs):
-        tokenize = functools.partial(self.tokenize)
+    def get_tokens_iterator(self, iter_docs, normalize=False):
+        tokenize = functools.partial(self.tokenize, normalize=normalize)
 
         def iter_tokens():
             for doc in iter_docs():
@@ -84,15 +76,15 @@ class MecabDocumentTokenizer(DocumentTokenizerBase):
 
 class NltkDocumentTokenizer(DocumentTokenizerBase):
     def __init__(self):
-        self.tagger = morpho.NltkTokenizer()
+        self.tagger = tokenizer.NltkTokenizer()
 
-    def tokenize(self, text):
-        tokens = self.tagger.tokenize(text)
+    def tokenize(self, text, normalize=False):
+        tokens = self.tagger.tokenize(text, normalize=normalize)
         tokens = concat_continuous_numbers(tokens)
         return tokens
 
-    def get_tokens_iterator(self, iter_docs):
-        tokenize = functools.partial(self.tokenize)
+    def get_tokens_iterator(self, iter_docs, normalize=False):
+        tokenize = functools.partial(self.tokenize, normalize=normalize)
 
         def iter_tokens():
             for doc in iter_docs():
