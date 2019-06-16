@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import copy
 import re
 import functools
 
@@ -17,7 +18,7 @@ def get_tagger(dic_path):
 
 def concat_continuous_numbers(tokens):
     prev_token = ""
-    tokens_out = tokens.copy()
+    tokens_out = copy.deepcopy(tokens)
     for i in range( 1, len(tokens_out) )[::-1]:
         cur_token = tokens_out[i]
         prev_token = tokens_out[i-1]
@@ -79,7 +80,7 @@ class NltkDocumentTokenizer(DocumentTokenizerBase):
         self.tagger = tokenizer.NltkTokenizer()
 
     def tokenize(self, text, normalize=False):
-        tokens = self.tagger.tokenize(text, normalize=normalize)
+        tokens,pos_tags = self.tagger.tokenize(text, normalize=normalize)
         tokens = concat_continuous_numbers(tokens)
         return tokens
 
