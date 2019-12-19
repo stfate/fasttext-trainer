@@ -2,18 +2,12 @@ from abc import ABC, abstractmethod
 import copy
 import re
 import functools
-
 import MeCab
 import nltk
 
 import lucia.tokenizer as tokenizer
 
-
 ptn_number = re.compile(r"([0-9]|[０-９])+")
-
-
-def get_tagger(dic_path):
-    return MeCab.Tagger(f"-Ochasen -d {dic_path}")
 
 
 def concat_continuous_numbers(tokens):
@@ -30,21 +24,6 @@ def concat_continuous_numbers(tokens):
     return tokens_out
 
 
-def tokenize(text, tagger):
-    tokens = []
-    parsed_text = tagger.parse(text)
-    if parsed_text is not None:
-        for line in parsed_text.split('\n'):
-            if line == "EOS":
-                break
-            surface = line.split('\t')[0]
-            tokens.append(surface)
-
-        tokens = concat_continuous_numbers(tokens)
-    
-    return tokens
-
-
 class DocumentTokenizerBase(ABC):
     @abstractmethod
     def tokenize(self, text):
@@ -57,7 +36,7 @@ class DocumentTokenizerBase(ABC):
 
 class MecabDocumentTokenizer(DocumentTokenizerBase):
     def __init__(self, dic_path):
-        self.tagger = tokenizer.MeCabTokenizer(dic_path)
+        self.tagger = tokenizer.MeCabWordTokenizer(dic_path)
 
     def tokenize(self, text, normalize=False):
         tokens,pos_tags = self.tagger.tokenize(text, normalize=normalize)
@@ -77,7 +56,7 @@ class MecabDocumentTokenizer(DocumentTokenizerBase):
 
 class NltkDocumentTokenizer(DocumentTokenizerBase):
     def __init__(self):
-        self.tagger = tokenizer.NltkTokenizer()
+        self.tagger = tokenizer.NltkWordTokenizer()
 
     def tokenize(self, text, normalize=False):
         tokens,pos_tags = self.tagger.tokenize(text, normalize=normalize)

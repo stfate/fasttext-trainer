@@ -22,9 +22,6 @@ def get_options():
 
     parser.add_argument("--dictionary-path", default="output/dic")
 
-    parser.add_argument("--use-pretrained-model", action="store_true", default=False)
-    parser.add_argument("--pretrained-model-path", default="model/pretrained.word2vec.gensim.model")
-
     args = parser.parse_args()
     return vars(args)
 
@@ -42,8 +39,6 @@ if __name__ == "__main__":
     min_count = options["min_count"]
     sg = options["sg"]
     epoch = options["epoch"]
-    use_pretrained_model = options["use_pretrained_model"]
-    pretrained_model_path = options["pretrained_model_path"]
     lang = options["lang"]
     
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -52,4 +47,4 @@ if __name__ == "__main__":
             tokenizer = document_tokenizer.MecabDocumentTokenizer(dic_path)
         elif lang == "en":
             tokenizer = document_tokenizer.NltkDocumentTokenizer()
-        fasttext_trainer.train_fasttext_model(output_model_path, iter_docs, tokenizer, size, window, min_count, sg, epoch, use_pretrained_model, pretrained_model_path)
+        fasttext_trainer.train_fasttext_model(output_model_path, iter_docs, tokenizer, size, window, min_count, sg, epoch)

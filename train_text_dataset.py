@@ -21,9 +21,6 @@ def get_options():
 
     parser.add_argument("--dictionary-path", default="output/dic")
 
-    parser.add_argument("--use-pretrained-model", action="store_true", default=False)
-    parser.add_argument("--pretrained-model-path", default="model/pretrained.word2vec.gensim.model")
-
     args = parser.parse_args()
     return vars(args)
 
@@ -39,10 +36,7 @@ if __name__ == "__main__":
     epoch = options["epoch"]
     dataset_path = options["dataset_path"]
     dic_path = options["dictionary_path"]
-    use_pretrained_model = options["use_pretrained_model"]
-    pretrained_model_path = options["pretrained_model_path"]
     lang = options["lang"]
-    # dataset = text_dataset.ArtistReviewDataset()
     dataset = text_dataset.MARDDataset()
     
     iter_docs = partial(dataset.iter_docs, dataset_path)
@@ -50,4 +44,4 @@ if __name__ == "__main__":
         tokenizer = document_tokenizer.MecabDocumentTokenizer(dic_path)
     elif lang == "en":
         tokenizer = document_tokenizer.NltkDocumentTokenizer()
-    fasttext_trainer.train_fasttext_model(output_model_path, iter_docs, tokenizer, size, window, min_count, sg, epoch, use_pretrained_model, pretrained_model_path)
+    fasttext_trainer.train_fasttext_model(output_model_path, iter_docs, tokenizer, size, window, min_count, sg, epoch)
