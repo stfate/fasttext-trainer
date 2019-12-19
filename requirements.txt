@@ -9,3 +9,4 @@ scipy
 six
 smart-open
 nltk
+more_itertools

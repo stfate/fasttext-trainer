@@ -1,4 +1,3 @@
-
 from abc import ABC, abstractmethod
 import bz2
 from pathlib import Path
@@ -48,7 +47,7 @@ class JapaneseText8Dataset(TextDatasetBase):
         dataset_path: string
             path to dataset
         """
-        with open(dataset_path, "r") as fi:
+        with open(dataset_path, "r", encoding="utf-8") as fi:
             text = fi.read()
             sentence_tokenizer = tokenizer.JapaneseSentenceTokenizer()
             sentences = sentence_tokenizer.tokenize(text)

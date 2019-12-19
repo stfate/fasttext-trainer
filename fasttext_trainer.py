@@ -2,15 +2,10 @@ import functools
 from pathlib import Path
 import multiprocessing
 import logging
-
+import more_itertools
 from gensim.models.fasttext import FastText
 
-
 logging.basicConfig(level=logging.INFO)
-
-
-def count_generator(iter):
-    return sum(1 for _ in iter)
 
 
 def train_fasttext_model(output_model_path, iter_docs, tokenizer, size=300, window=8, min_count=5, sg=1, epoch=5):
@@ -20,7 +15,7 @@ def train_fasttext_model(output_model_path, iter_docs, tokenizer, size=300, wind
     output_model_path : string
         path of fastText model
     iter_docs : iterator
-        iterator of documents, which are lists of words
+        iterator of documents, which are raw texts
     tokenizer : subclass of DocumentTokenizerBase
         word tokenizer
     size : int
@@ -37,7 +32,10 @@ def train_fasttext_model(output_model_path, iter_docs, tokenizer, size=300, wind
     logging.info("get tokens iterator")
 
     iter_tokens = tokenizer.get_tokens_iterator(iter_docs, normalize=False)
-    n_obs = count_generator(iter_tokens())
+
+    logging.info("count number of documents")
+
+    n_obs = more_itertools.ilen(iter_tokens())
 
     logging.info("build vocabulary")
 
@@ -48,7 +46,7 @@ def train_fasttext_model(output_model_path, iter_docs, tokenizer, size=300, wind
         sg=sg,
         workers=multiprocessing.cpu_count()
     )
-    model.build_vocab(iter_tokens(), update=False)
+    model.build_vocab(iter_tokens())
     
     logging.info("train fasttext")
 

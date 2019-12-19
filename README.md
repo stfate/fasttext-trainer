@@ -28,7 +28,7 @@ pip install -r requirements.txt
 モデルのハイパーパラメータを指定する．
 
 ```bash
-python src/train_wikipedia.py -o $OUTPUT_PATH --dictionary-path=$DIC_PATH --wikipedia-dump-path=$WIKIPEDIA_DUMP_PATH --size=100 --window=8 --min-count=5
+python train_wikipedia.py -o $OUTPUT_PATH --dictionary-path=$DIC_PATH --wikipedia-dump-path=$WIKIPEDIA_DUMP_PATH --size=100 --window=8 --min-count=5
 ```
 
 パラメータ指定方法の詳細は`train_wikipedia.sh`を参照されたい．
@@ -36,7 +36,7 @@ python src/train_wikipedia.py -o $OUTPUT_PATH --dictionary-path=$DIC_PATH --wiki
 ## General dataset
 
 ```bash
-python src/train_text_dataset.py -o $OUTPUT_PATH --dictionary-path=$DIC_PATH --corpus-path=$CORPUS_PATH --size=100 --window=8 --min-count=5
+python train_text_dataset.py -o $OUTPUT_PATH --dictionary-path=$DIC_PATH --corpus-path=$CORPUS_PATH --size=100 --window=8 --min-count=5
 ```
 
 `TextDatasetBase`を継承したデータセットクラスを作成することで，任意のテキストデータセットに対し実行することが可能．
