@@ -1,6 +1,6 @@
-[submodule "wikiextractor"]
-	path = wikiextractor
-	url = https://github.com/attardi/wikiextractor
 [submodule "lucia"]
 	path = lucia
 	url = git@github.com:stfate/lucia.git
+[submodule "wikiextractor"]
+	path = wikiextractor
+	url = https://github.com/attardi/wikiextractor.git

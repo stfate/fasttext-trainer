@@ -1,7 +1,7 @@
 #!/bin/bash
 
-WIKIPEDIA_DUMP_PATH=../../dataset/Wikipedia/enwiki-latest-pages-articles.xml.bz2
-LANG=en
+WIKIPEDIA_DUMP_PATH=../../dataset/Wikipedia/jawiki-latest-pages-articles.xml.bz2
+LANG=ja
 DIC_PATH=/usr/local/lib/mecab/dic/mecab-ipadic-neologd
 OUTPUT_PATH=model/enwiki-fasttext-model/fasttext.gensim.model
 SIZE=300

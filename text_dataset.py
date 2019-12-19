@@ -15,13 +15,39 @@ import lucia.tokenizer as tokenizer
 
 
 class TextDatasetBase(ABC):
+    """
+    a bass class for text dataset
+    
+    Attributes
+    ----------
+    """
     @abstractmethod
     def iter_docs(self):
+        """
+        iterator of documents
+        
+        Parameters
+        ----------
+        """
         yield None
 
 
 class JapaneseText8Dataset(TextDatasetBase):
+    """
+    dataset for japanese text8
+    
+    Attributes
+    ----------
+    """
     def iter_docs(self, dataset_path):
+        """
+        get iterator of texts in one document
+        
+        Parameters
+        ----------
+        dataset_path: string
+            path to dataset
+        """
         with open(dataset_path, "r") as fi:
             text = fi.read()
             sentence_tokenizer = tokenizer.JapaneseSentenceTokenizer()
@@ -47,11 +73,10 @@ class WikipediaDataset(TextDatasetBase):
         dir_path : string
             Directory path where extracted text files are put
         """
-
         extracted_file_path_pattern = os.path.join(dir_path, "*", "*.bz2")
         extracted_file_paths = glob(extracted_file_path_pattern)
         if len(extracted_file_paths) == 0:
-            cmd = [self.__wikiextractor_cmd, "--compress", "--quiet", "-o", dir_path, file_path]
+            cmd = ["python", self.__wikiextractor_cmd, "--compress", "--quiet", "-o", dir_path, file_path]
             subprocess.call(cmd, stdout=sys.stdout)
             extracted_file_paths = glob(extracted_file_path_pattern)
 
@@ -91,6 +116,14 @@ class ArtistReviewDataset(TextDatasetBase):
         self.root_path = None
 
     def iter_docs(self, dataset_path):
+        """
+        get iterator of texts in one document
+        
+        Parameters
+        ----------
+        dataset_path: string
+            path to dataset
+        """
         self.root_path = Path(dataset_path)
         dataset_flist = self.root_path.glob("contents/*/*.html.txt")
         meta = json.load(open(self.root_path / "metadata.json", "r"))
@@ -107,6 +140,14 @@ class MARDDataset(TextDatasetBase):
         self.root_path = None
 
     def iter_docs(self, dataset_path):
+        """
+        get iterator of texts in one document
+        
+        Parameters
+        ----------
+        dataset_path: string
+            path to dataset
+        """
         self.root_path = Path(dataset_path)
         reviews_json_fn = self.root_path / "mard_reviews.json"
         with open(reviews_json_fn, "r") as fi:
