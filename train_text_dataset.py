@@ -37,11 +37,13 @@ if __name__ == "__main__":
     dataset_path = options["dataset_path"]
     dic_path = options["dictionary_path"]
     lang = options["lang"]
-    dataset = text_dataset.MARDDataset()
-    
-    iter_docs = partial(dataset.iter_docs, dataset_path)
+
     if lang == "ja":
         tokenizer = document_tokenizer.MecabDocumentTokenizer(dic_path)
     elif lang == "en":
         tokenizer = document_tokenizer.NltkDocumentTokenizer()
-    fasttext_trainer.train_fasttext_model(output_model_path, iter_docs, tokenizer, size, window, min_count, sg, epoch)
+    dataset = text_dataset.MARDDataset(tokenizer)
+    
+    iter_docs = partial(dataset.iter_docs, dataset_path)
+    
+    fasttext_trainer.train_fasttext_model(output_model_path, iter_docs, size, window, min_count, sg, epoch)

@@ -5,7 +5,7 @@
 DATASET_PATH=../../dataset/MARD
 LANG=en
 DIC_PATH=/usr/local/lib/mecab/dic/mecab-ipadic-neologd
-OUTPUT_PATH=model/mard-fasttext-model-finetuned/fasttext.gensim.model
+OUTPUT_PATH=model/mard-fasttext-model/fasttext.gensim.model
 SIZE=300
 WINDOW=8
 MIN_COUNT=1
