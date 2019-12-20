@@ -9,6 +9,6 @@ OUTPUT_PATH=model/mard-fasttext-model-finetuned/fasttext.gensim.model
 SIZE=300
 WINDOW=8
 MIN_COUNT=1
-EPOCH=1
+EPOCH=5
 
 python train_text_dataset.py -o $OUTPUT_PATH --dictionary-path=$DIC_PATH --dataset-path=$DATASET_PATH --lang=$LANG --size=$SIZE --window=$WINDOW --min-count=$MIN_COUNT --epoch=$EPOCH
