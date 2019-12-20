@@ -12,6 +12,7 @@ fastTextはgensimの実装を使用．
 他の依存パッケージは`requirements.txt`を参照．
 
 
+
 # Setup
 
 ```bash
