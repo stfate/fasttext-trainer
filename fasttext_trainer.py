@@ -5,10 +5,10 @@ import logging
 import more_itertools
 from gensim.models.fasttext import FastText
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format="[%(asctime)s] %(levelname)s:%(message)s", datefmt="%Y/%m/%d %H:%M:%S")
 
 
-def train_fasttext_model(output_model_path, iter_docs, tokenizer, size=300, window=8, min_count=5, sg=1, epoch=5):
+def train_fasttext_model(output_model_path, iter_docs, size=300, window=8, min_count=5, sg=1, epoch=5):
     """
     Parameters
     ----------
@@ -16,8 +16,6 @@ def train_fasttext_model(output_model_path, iter_docs, tokenizer, size=300, wind
         path of fastText model
     iter_docs : iterator
         iterator of documents, which are raw texts
-    tokenizer : subclass of DocumentTokenizerBase
-        word tokenizer
     size : int
         size of word vector
     window : int
@@ -29,15 +27,7 @@ def train_fasttext_model(output_model_path, iter_docs, tokenizer, size=300, wind
     epoch : int
         number of epochs
     """
-    logging.info("get tokens iterator")
-
-    iter_tokens = tokenizer.get_tokens_iterator(iter_docs, normalize=False)
-
-    logging.info("count number of documents")
-
-    n_obs = more_itertools.ilen(iter_tokens())
-
-    logging.info("build vocabulary")
+    logging.info("build vocabularies")
 
     model = FastText(
         size=size,
@@ -46,11 +36,11 @@ def train_fasttext_model(output_model_path, iter_docs, tokenizer, size=300, wind
         sg=sg,
         workers=multiprocessing.cpu_count()
     )
-    model.build_vocab(iter_tokens())
+    model.build_vocab(iter_docs())
     
     logging.info("train fasttext")
 
-    model.train(iter_tokens(), total_examples=n_obs, epochs=epoch)
+    model.train(iter_docs(), total_examples=model.corpus_count, epochs=epoch)
     model.init_sims(replace=True)
 
     logging.info("save model")
